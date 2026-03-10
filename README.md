@@ -5,8 +5,9 @@ This project explores a **statistical arbitrage strategy based on the spread of 
 The objective is to identify **temporary deviations in the volatility relationship** between the two indices and exploit them using a **Z-Score based mean-reversion strategy**.
 
 <p align="center">
-  <img src="plots/NiftyVsBanknifty.png" width="800"/>
+  <img src="plots/NiftyVsBanknifty.png" width="800" height = "350"/>
 </p>
+
 
 ##  Problem Statement
 
@@ -31,11 +32,11 @@ Note: Spread represents the **relative volatility premium between the two indice
 
 
 To determine whether the spread is unusually high or low, it is standardized using a **Z-score**:
-$$ Z_t = \frac{Spread_t - \mu}{\sigma} $$
+$$Z_t = \frac{Spread_t - \mu}{\sigma}$$
 
 Where:
-* $ \mu $ = mean spread
-* $ \sigma $ = standard deviation of spread
+* $\mu$ = mean spread
+* $\sigma$ = standard deviation of spread
 
 The Z-score measures **how many standard deviations the current spread is away from its typical level**.
 
@@ -46,9 +47,9 @@ The strategy assumes that the spread between the two indices **mean-reverts over
 
 |  Condition   |        Interpretation          | Trading Action |
 | ------------ | ------------------------------ | -------------- |
-|  $ Z > +1 $  |      Spread unusually high     | Short spread   |
-|  $ Z < -1 $  |      Spread unusually low      | Long spread    |
-| $ \|Z\| < 0.25$| Spread returned to equilibrium | Exit position  |
+|  $Z > +1$  |      Spread unusually high     | Short spread   |
+|  $Z < -1$  |      Spread unusually low      | Long spread    |
+| $\|Z\| < 0.25$| Spread returned to equilibrium | Exit position  |
 
 This approach ensures that trades are only executed when the spread shows **statistically significant deviations**, reducing noise-driven signals.
 
@@ -95,4 +96,5 @@ Performance will be evaluated using:
 * trade frequency
 * drawdown analysis
 * comparison with baseline strategies
+
 
