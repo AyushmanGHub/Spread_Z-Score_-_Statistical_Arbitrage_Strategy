@@ -53,14 +53,6 @@ The strategy assumes that the spread between the two indices **mean-reverts over
 
 This approach ensures that trades are only executed when the spread shows **statistically significant deviations**, reducing noise-driven signals.
 
-### Project Content
-
-- 1. Data Cleaning
-- 2. Exploratory Data Analysis (EDA)
-- 3. Statistical Analysis
-- 4. Strategy Framework (Planned)
-
-
 
 ## Exploratory Data Analysis (EDA)
 
@@ -80,21 +72,64 @@ The exploratory analysis reveals several important insights:
 - **Rare Extreme Deviations:** Most spread observations lie close to their mean, while **extreme deviations occur occasionally**. These rare events represent `potential statistical arbitrage opportunities`.
 - **Intraday Regime Changes:** Spread behavior varies across time, with different **volatility regimes during the trading day**. Local normalization (hourly Z-scores) helps account for these regime shifts.
 
-## **Z-Score Strategy (Upcoming Implementation)**
 
-The next stage of the project will implement the **Spread Z-Score trading strategy**.
+# Results
 
-The strategy will:
-
-1. Monitor the IV spread between BankNifty and Nifty
-2. Compute Z-scores using rolling windows
-3. Generate trading entry and exit signals when spreads deviate significantly
-4. enter when **spread diverges** and exit trades once spreads **revert toward equilibrium**
-
-Performance will be evaluated using:
-* cumulative PnL
-* trade frequency
-* drawdown analysis
-* comparison with baseline strategies
+The performance of the **Z-Score Mean Reversion Strategy** is compared with a **baseline spread strategy** to evaluate whether statistical normalization improves trading performance.
 
 
+
+## Without Execution Latency
+
+| Strategy                        | Total PnL  | Sharpe Ratio | Max Drawdown | Approx Trades |
+| ------------------------------- | ---------- | ------------ | ------------ | ------------- |
+| Baseline Spread Strategy        | 24.23      | 1.73         | -3.76        | 310           |
+| Z-Score Mean Reversion Strategy | **297.95** | **4.35**     | **-0.98**    | 5413          |
+
+<p align="center">
+<img src="plots/ZScoreVsBaseline.png" width="800">
+</p>
+
+
+
+* The **Z-Score strategy significantly outperforms the baseline strategy**.
+* Total profit increases from **24 → ~298**, representing more than a **12× improvement**.
+* The **Sharpe ratio improves from 1.73 to 4.35**, indicating far better **risk-adjusted performance**.
+* The **maximum drawdown decreases substantially**, suggesting **more stable returns**.
+* The Z-Score strategy executes **more trades**, reflecting the frequent opportunities created by spread mean-reversion.
+
+The equity curve also shows **consistent growth over time**, whereas the baseline strategy produces relatively modest profits.
+
+## With 1-Minute Execution Latency
+
+| Strategy                      | Total PnL  | Sharpe Ratio | Max Drawdown | Approx Trades |
+| ----------------------------- | ---------- | ------------ | ------------ | ------------- |
+| Baseline Strategy             | 24.23      | 1.73         | -3.76        | 310           |
+| Z-Score Strategy (1m Latency) | **114.76** | **5.07**     | -2.85        | 5400          |
+
+<p align="center">
+<img src="plots/ZScore(1minLatency)VsBaseline.png" width="800">
+</p>
+
+
+* Profitability **decreases from ~298 to ~115** after introducing execution latency.
+* This confirms that **execution delays reduce arbitrage efficiency**.
+* Despite the reduction, the **Z-Score strategy still significantly outperforms the baseline strategy**.
+* The Sharpe ratio remains **strong at 5.07**, indicating **robust risk-adjusted returns** even with latency.
+* The strategy continues to exploit spread deviations effectively under more realistic trading conditions.
+
+The latency-adjusted equity curve still shows **steady performance**, although at a slower growth rate compared to the ideal no-latency scenario.
+
+## Conclusion
+
+This project demonstrates the effectiveness of **statistical arbitrage using Z-score normalization** on the volatility spread between BankNifty and Nifty.
+
+Key takeaways:
+
+* **Strong relationship between indices:** BankNifty and Nifty implied volatilities move closely together due to their structural linkage.
+* **Mean-reverting spread behavior:** The volatility spread remains bounded and frequently reverts toward equilibrium.
+* **Z-score filtering improves signals:** Trading only statistically significant deviations reduces noise and improves performance.
+* **Substantial performance improvement:** The Z-score strategy achieves **12× higher profitability** than the baseline strategy.
+* **Robustness to execution delays:** Even with realistic **1-minute latency**, the strategy remains profitable and maintains strong risk-adjusted returns.
+
+Overall, the results suggest that **spread-based statistical arbitrage using Z-score normalization can effectively capture relative volatility mispricing in index options markets**.
